@@ -4,4 +4,5 @@
 A simple POS system using the React Native Framework
 
 Developer
-Cortez, Leo Anthony P. BSCS
+
+ - Cortez, Leo Anthony P. BSCS
