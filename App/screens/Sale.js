@@ -6,7 +6,7 @@ export default () => {
     <View>
       <StatusBar barStyle={"default"} />
       <SafeAreaView>
-        <Text>Home Screen</Text>
+        <Text>Sale Screen</Text>
       </SafeAreaView>
     </View>
   );
