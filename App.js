@@ -1,4 +1,4 @@
 import React from "react";
-import Navigation from './App/config/Navigation';
+import { TabNavigation } from "./App/config/Navigation";
 
-export default () => <Navigation />;
+export default () => <TabNavigation />;
