@@ -6,9 +6,12 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  Dimensions,
 } from "react-native";
 
 import colors from "../constants/colors";
+
+const screen = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   txtError: {
@@ -51,15 +54,13 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   searchContainer: {
-    width: "90%",
+    width: "100%",
     height: 40,
     flexDirection: "row",
+    marginBottom: 10,
   },
   container: {
-    height: 80,
     alignItems: "center",
-    height: "100%",
-    width: "100%",
   },
 });
 

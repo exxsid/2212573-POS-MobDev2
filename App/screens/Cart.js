@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   cartButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: colors.primary,
+    backgroundColor: colors.backgroundSecondary,
     paddingVertical: 5,
     paddingHorizontal: 15,
     borderRadius: 2,
@@ -86,12 +86,14 @@ export default ({ navigation }) => {
         <Text style={styles.text}>All Products</Text>
         <TouchableOpacity style={styles.cartButton}>
           <Text
-            style={[styles.text, { fontSize: 15, paddingRight: 10 }]}
+            style={[
+              styles.text,
+              { fontSize: 15, paddingRight: 10, color: "red" },
+            ]}
             onPress={() => navigation.push("Cart")}
           >
-            Cart
+            Clear cart
           </Text>
-          <Ionicons name="cart" size={30} color={colors.text} />
         </TouchableOpacity>
       </View>
 
@@ -102,7 +104,7 @@ export default ({ navigation }) => {
             <ProductContainer
               info={item}
               onPress={() => handleSnapPress(0)}
-              trailing={"cart"}
+              trailing={"trash"}
             />
           );
         }}
@@ -110,7 +112,7 @@ export default ({ navigation }) => {
         showsVerticalScrollIndicator={false}
       />
 
-      <BottomSheet
+      {/* <BottomSheet
         ref={sheetRef}
         snapPoints={snapPoint}
         enablePanDownToClose={true}
@@ -119,7 +121,7 @@ export default ({ navigation }) => {
         <BottomSheetView>
           <AddToCart info={products.at(0)} />
         </BottomSheetView>
-      </BottomSheet>
+      </BottomSheet> */}
     </View>
   );
 };

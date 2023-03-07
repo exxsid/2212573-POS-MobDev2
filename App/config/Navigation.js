@@ -1,14 +1,17 @@
 import React from "react";
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createStackNavigator } from "@react-navigation/stack";
 import { Ionicons } from "@expo/vector-icons";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 
 import Home from "../screens/Home";
 import Inventory from "../screens/Inventory";
 import Sale from "../screens/Sale";
 import Settings from "../screens/Settings";
 import colors from "../constants/colors";
+import Cart from "../screens/Cart";
+import AddToCart from "../components/AddToCart";
 
 const styles = StyleSheet.create({
   headerStyle: {
@@ -17,6 +20,8 @@ const styles = StyleSheet.create({
   },
 });
 
+const screen = Dimensions.get("window");
+
 // screens
 const homeName = "Home";
 const inventoryName = "Inventory";
@@ -24,6 +29,7 @@ const saleName = "Sale";
 const settingsName = "Settings";
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 export const TabNavigation = () => {
   return (
@@ -50,15 +56,11 @@ export const TabNavigation = () => {
           },
           tabBarStyle: {
             backgroundColor: colors.backgroundPrimary,
-            paddingVertical: 15,
+            height: screen.height * 0.09,
+            paddingVertical: 10,
             borderTopWidth: 0,
           },
-          headerStyle: styles.headerStyle,
-          headerTintColor: colors.text,
-          headerTitleStyle: {
-            fontWeight: "bold",
-            fontSize: 30,
-          },
+          headerShown: false,
         })}
         tabBarOptions={{
           activeTintColor: colors.primary,
@@ -68,9 +70,28 @@ export const TabNavigation = () => {
       >
         <Tab.Screen name={homeName} component={Home} />
         <Tab.Screen name={inventoryName} component={Inventory} />
-        <Tab.Screen name={saleName} component={Sale} />
+        <Tab.Screen name={saleName} component={SaleStack} />
         <Tab.Screen name={settingsName} component={Settings} />
       </Tab.Navigator>
     </NavigationContainer>
+  );
+};
+
+export const SaleStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: styles.headerStyle,
+        headerTintColor: colors.text,
+        headerTitleStyle: {
+          fontWeight: "bold",
+          fontSize: 30,
+        },
+      }}
+    >
+      <Stack.Screen name="Sale" component={Sale} />
+      <Stack.Screen name="Cart" component={Cart} />
+      <Stack.Screen name="AddToCart" component={AddToCart} />
+    </Stack.Navigator>
   );
 };
