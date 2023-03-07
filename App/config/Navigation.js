@@ -2,12 +2,20 @@ import React from "react";
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
+import { StyleSheet } from "react-native";
 
 import Home from "../screens/Home";
 import Inventory from "../screens/Inventory";
 import Sale from "../screens/Sale";
 import Settings from "../screens/Settings";
 import colors from "../constants/colors";
+
+const styles = StyleSheet.create({
+  headerStyle: {
+    backgroundColor: colors.backgroundPrimary,
+    borderBottomWidth: 0,
+  },
+});
 
 // screens
 const homeName = "Home";
@@ -43,6 +51,13 @@ export const TabNavigation = () => {
           tabBarStyle: {
             backgroundColor: colors.backgroundPrimary,
             paddingVertical: 15,
+            borderTopWidth: 0,
+          },
+          headerStyle: styles.headerStyle,
+          headerTintColor: colors.text,
+          headerTitleStyle: {
+            fontWeight: "bold",
+            fontSize: 30,
           },
         })}
         tabBarOptions={{
