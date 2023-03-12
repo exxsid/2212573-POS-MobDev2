@@ -1,94 +1,81 @@
-import React from "react";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  Image,
-  TouchableOpacity,
-} from "react-native";
-import { Input } from "@ui-kitten/components";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, ScrollView, Text, Dimensions } from "react-native";
+import { TextField, Button, Colors } from "react-native-ui-lib";
+import { Entypo } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
+import CartProductCard from "./card/CartProductCard";
 import colors from "../constants/colors";
-import { SearchBar } from "react-native-screens";
+
+const screen = Dimensions.get("window");
 
 export default ({ info }) => {
   const { imageSource, name, unit, quantity, price } = info;
-  return (
-    <View style={{ padding: 5 }}>
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: 5,
-        }}
-      >
-        <Image source={imageSource} style={styles.productImage} />
-        <View style={{ flexDirection: "column" }}>
-          <Text style={styles.productHeader}>{name}</Text>
-          <Text style={styles.productSub}>{unit}</Text>
-          <Text style={styles.productSub}>{quantity} pcs available</Text>
-        </View>
-        <Text style={styles.productHeader}>Php {price}</Text>
-      </View>
-      <Text style={{ fontWeight: "bold" }}>Quantity</Text>
-      <Text
-        style={{
-          margin: 10,
-          // paddingHorizotal: 20,
-          paddingVertical: 10,
-          backgroundColor: "grey",
-        }}
-      >
-        1
-      </Text>
+  const [inputValue, setInputValue] = useState("1");
 
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <TouchableOpacity
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            backgroundColor: "gray",
-            paddingVertical: 5,
-            paddingHorizontal: 15,
-            borderRadius: 2,
-            justifyContent: "space-between",
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 15,
-              color: "red",
-              fontWeight: "bold",
-            }}
-          >
-            Cancel
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            backgroundColor: colors.primary,
-            paddingVertical: 5,
-            paddingHorizontal: 15,
-            borderRadius: 2,
-            justifyContent: "space-between",
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 15,
-              color: colors.text,
-              fontWeight: "bold",
-            }}
-          >
-            Add to cart
-          </Text>
-        </TouchableOpacity>
+  const handleInput = (text) => {
+    setInputValue(text);
+  };
+
+  const handlePlusButton = () => {
+    const newQuantity = parseInt(inputValue) + 1;
+    const maxInputValue = quantity; // maximum input value
+    if (newQuantity > maxInputValue) {
+      setInputValue("1");
+      alert("Input must not be greater than the stock");
+    } else {
+      setInputValue(newQuantity.toString());
+    }
+  };
+
+  const handleMinusButton = () => {
+    const newQuantity = parseInt(inputValue) - 1;
+    if (newQuantity <= 0) {
+      alert("Quantity can never be zero or less");
+      setInputValue("1");
+    } else {
+      setInputValue(newQuantity.toString());
+    }
+  };
+
+  const validateInput = () => {
+    const maxInputValue = quantity; // maximum input value
+    const parsedValue = parseFloat(inputValue);
+    if (parsedValue > maxInputValue) {
+      setInputValue("");
+      alert("Input must not be greater than the stock");
+    }
+  };
+
+  return (
+    <ScrollView>
+      <View style={{ padding: 10 }}>
+        <CartProductCard info={info} />
+        <View style={{ flexDirection: "row" }}>
+          <TextField
+            placeholder={"Quantity"}
+            floatingPlaceholder
+            onChangeText={handleInput}
+            keyboardType="numeric"
+            value={inputValue}
+            onBlur={validateInput}
+            style={styles.input}
+          />
+          <TouchableOpacity style={styles.button} onPress={handleMinusButton}>
+            <Entypo name="minus" size={30} color={colors.backgroundSecondary} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handlePlusButton}>
+            <Entypo name="plus" size={30} color={colors.backgroundSecondary} />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.addCancelContainer}>
+          <TouchableOpacity>
+            <Text>Test</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -103,6 +90,17 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     margin: 2,
-    backgroundColor: "red",
+    width: screen.width * 0.6,
+    fontSize: 20,
   },
+  button: {
+    backgroundColor: "white",
+    padding: 2,
+    paddingHorizontal: 5,
+    margin: 3,
+    borderRadius: 2,
+    borderColor: colors.backgroundSecondary,
+    borderWidth: 1,
+  },
+  addCancelContainer: { flexDirection: "row", alignItems: "left" },
 });

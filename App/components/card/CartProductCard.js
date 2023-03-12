@@ -1,9 +1,7 @@
-import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { View, Text, StyleSheet, StatusBar, Image } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { View, Text, StyleSheet, Image } from "react-native";
 
-import colors from "../constants/colors";
+import colors from "../../constants/colors";
 
 const styles = StyleSheet.create({
   container: {
@@ -25,12 +23,12 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
   productHeader: {
-    color: colors.text,
+    color: colors.backgroundPrimary,
     fontWeight: "bold",
     fontSize: 20,
   },
   productSub: {
-    color: colors.text,
+    color: colors.backgroundPrimary,
     fontSize: 10,
   },
 });
