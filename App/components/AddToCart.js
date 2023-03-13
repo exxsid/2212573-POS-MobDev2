@@ -9,8 +9,8 @@ import colors from "../constants/colors";
 
 const screen = Dimensions.get("window");
 
-export default ({ info }) => {
-  const { imageSource, name, unit, quantity, price } = info;
+export default ({ navigation, route }) => {
+  const { imageSource, name, unit, quantity, price } = route.params;
   const [inputValue, setInputValue] = useState("1");
 
   const handleInput = (text) => {
@@ -50,7 +50,7 @@ export default ({ info }) => {
   return (
     <ScrollView>
       <View style={{ padding: 10 }}>
-        <CartProductCard info={info} />
+        <CartProductCard info={route.params} />
         <View style={{ flexDirection: "row" }}>
           <TextField
             placeholder={"Quantity"}
@@ -102,5 +102,5 @@ const styles = StyleSheet.create({
     borderColor: colors.backgroundSecondary,
     borderWidth: 1,
   },
-  addCancelContainer: { flexDirection: "row", alignItems: "left" },
+  addCancelContainer: { flexDirection: "row" },
 });

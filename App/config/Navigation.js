@@ -85,7 +85,8 @@ export const TabNavigation = () => {
 
 export const SaleStackScreen = () => {
   return (
-    <SaleStack.Navigator
+    <NavigationContainer>
+      <SaleStack.Navigator
       screenOptions={{
         headerStyle: styles.headerStyle,
         headerTintColor: colors.text,
@@ -97,6 +98,9 @@ export const SaleStackScreen = () => {
     >
       <SaleStack.Screen name="Sale" component={SaleScreen} />
       <SaleStack.Screen name="Cart" component={CartScreen} />
+      <SaleStack.Screen name="AddToCart" component={AddToCartScreen} />
     </SaleStack.Navigator>
+    </NavigationContainer>
+    
   );
 };

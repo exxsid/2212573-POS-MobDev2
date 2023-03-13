@@ -1,4 +1,4 @@
 import React from "react";
-import { TabNavigation } from "./App/config/Navigation";
+import { SaleStackScreen } from "./App/config/Navigation";
 
-export default () => <TabNavigation />;
+export default () => <SaleStackScreen />;

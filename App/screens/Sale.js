@@ -49,10 +49,7 @@ const styles = StyleSheet.create({
 });
 
 export default ({ navigation }) => {
-  const sheetRef = useRef(null);
-  const [isOpen, setIsOpen] = useState(false);
   const [products, setProduct] = useState(inventory);
-  const [selectedProduct, setSelectedProduct] = useState(products.at(0));
 
   const updateProdQuantity = (newQuantity, index) => {
     const updatedProducts = products.map((item, i) => {
@@ -65,26 +62,11 @@ export default ({ navigation }) => {
     setProduct(updatedProducts);
   };
 
-  const snapPoint = ["40%", "80%", "90%", "95%"];
-
-  const handleSnapPress = (item) => {
-    sheetRef.current?.present();
-    // updateProdQuantity(inventory.at(index).quantity, index);
-    console.log(item);
-    setSelectedProduct(item);
-  };
-
   const renderAtToCartPage = (item) => {
-    console.log("tangina mo jopher");
     return <AddToCart info={item} />;
   };
-  // const handleClosePress = useCallback(() => {
-  //   sheetRef.current?.close();
-  //   setIsOpen(false);
-  // }, []);
 
   return (
-    <BottomSheetModalProvider>
       <View style={styles.container}>
         <StatusBar barStyle={"default"} />
 
@@ -107,18 +89,14 @@ export default ({ navigation }) => {
           data={inventory}
           renderItem={({ item }) => {
             return (
-              <TouchableOpacity onPress={() => handleSnapPress(item)}>
+              <TouchableOpacity onPress={() => navigation.push("AddToCart", {route: item})}>
                 <ProductContainer info={item} />
               </TouchableOpacity>
             );
           }}
-          keyExtractor={(product) => product.name}
+          keyExtractor={(product) => product.id}
           showsVerticalScrollIndicator={false}
         />
-        <BottomSheetModal ref={sheetRef} index={1} snapPoints={snapPoint}>
-          {renderAtToCartPage(selectedProduct)}
-        </BottomSheetModal>
       </View>
-    </BottomSheetModalProvider>
   );
 };
