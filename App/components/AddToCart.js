@@ -9,9 +9,10 @@ import colors from "../constants/colors";
 
 const screen = Dimensions.get("window");
 
-export default ({ info, handleCancelPress}) => {
+export default ({ info, handleCancelPress, handleAddToCartPress }) => {
   const { imageSource, name, unit, quantity, price } = info;
   const [inputValue, setInputValue] = useState("1");
+  const [totalPrice, setTotalPrice] = useState(0.0);
 
   const handleInput = (text) => {
     setInputValue(text);
@@ -26,6 +27,7 @@ export default ({ info, handleCancelPress}) => {
     } else {
       setInputValue(newQuantity.toString());
     }
+    setTotalPrice(newQuantity * price);
   };
 
   const handleMinusButton = () => {
@@ -36,6 +38,7 @@ export default ({ info, handleCancelPress}) => {
     } else {
       setInputValue(newQuantity.toString());
     }
+    setTotalPrice(newQuantity * price);
   };
 
   const validateInput = () => {
@@ -69,12 +72,28 @@ export default ({ info, handleCancelPress}) => {
           </TouchableOpacity>
         </View>
 
+        <View style={{ marginVertical: 10 }}>
+          <Text style={{ fontWeight: "bold" }}>Total Price</Text>
+          <Text>Php {totalPrice}</Text>
+        </View>
+        {/* buttons */}
         <View style={styles.addCancelContainer}>
-          <TouchableOpacity style={styles.cancelButton} onPress={handleCancelPress}>
+          <TouchableOpacity
+            style={styles.cancelButton}
+            onPress={handleCancelPress}
+          >
             <Text>Cancel</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.addButton}>
-            <Text style={{color: colors.text}}>Add to cart</Text>
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() =>
+              handleAddToCartPress(
+                info.quantity - parseInt(inputValue),
+                info.id - 1
+              )
+            }
+          >
+            <Text style={{ color: colors.text }}>Add to cart</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -105,19 +124,24 @@ const styles = StyleSheet.create({
     borderColor: colors.backgroundSecondary,
     borderWidth: 1,
   },
-  addCancelContainer: { flex: 1, justifyContent:"flex-end", flexDirection: "row" , marginTop: 10},
-  cancelButton:{
+  addCancelContainer: {
+    flex: 1,
+    justifyContent: "flex-end",
+    flexDirection: "row",
+    marginTop: 10,
+  },
+  cancelButton: {
     padding: 10,
-    fontWeight:"bold",
+    fontWeight: "bold",
     borderColor: "red",
     borderWidth: 1,
     borderRadius: 10,
-    marginRight: 10
+    marginRight: 10,
   },
-  addButton:{
+  addButton: {
     padding: 10,
-    fontWeight:"bold",
+    fontWeight: "bold",
     backgroundColor: colors.primary,
-    borderRadius: 10
-  }
+    borderRadius: 10,
+  },
 });

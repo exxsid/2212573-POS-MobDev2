@@ -1,5 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
-import React, { useCallback, useRef, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useRef,
+  useMemo,
+  useState,
+  useEffect,
+} from "react";
 import {
   View,
   Text,
@@ -19,6 +25,7 @@ import { Searchbar } from "../components/SearchBar";
 import colors from "../constants/colors";
 import AddToCart from "../components/AddToCart";
 import { inventory } from "../constants/products";
+import cartList from "../constants/cartlist";
 
 const styles = StyleSheet.create({
   container: {
@@ -52,24 +59,21 @@ export default ({ navigation }) => {
   const sheetRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [products, setProduct] = useState(inventory);
+  const [cart, setCart] = useState(cartList);
   const [selectedProduct, setSelectedProduct] = useState(products.at(0));
 
-  const updateProdQuantity = (newQuantity, index) => {
-    const updatedProducts = products.map((item, i) => {
-      if (i === index) {
-        return { ...item, quantity: newQuantity };
-      } else {
-        return item;
-      }
-    });
+  const handleAddToCartPress = (newQuantity, index) => {
+    const updatedProducts = [...products];
+    updatedProducts[index].quantity = newQuantity;
+
     setProduct(updatedProducts);
+    handleCancelPress();
   };
 
   const snapPoint = ["40%", "80%", "90%", "95%"];
 
   const handleSnapPress = (item) => {
     sheetRef.current?.present();
-    // updateProdQuantity(inventory.at(index).quantity, index);
     setSelectedProduct(item);
   };
 
@@ -78,12 +82,14 @@ export default ({ navigation }) => {
   };
 
   const renderAtToCartPage = (item) => {
-    return <AddToCart info={item} handleCancelPress={handleCancelPress} />;
+    return (
+      <AddToCart
+        info={item}
+        handleCancelPress={handleCancelPress}
+        handleAddToCartPress={handleAddToCartPress}
+      />
+    );
   };
-  // const handleClosePress = useCallback(() => {
-  //   sheetRef.current?.close();
-  //   setIsOpen(false);
-  // }, []);
 
   return (
     <BottomSheetModalProvider>
@@ -97,7 +103,7 @@ export default ({ navigation }) => {
           <TouchableOpacity style={styles.cartButton}>
             <Text
               style={[styles.text, { fontSize: 15, paddingRight: 10 }]}
-              onPress={() => navigation.push("Cart")}
+              onPress={() => navigation.push("Cart", { cart })}
             >
               Cart
             </Text>
@@ -117,6 +123,7 @@ export default ({ navigation }) => {
           keyExtractor={(product) => product.id}
           showsVerticalScrollIndicator={false}
         />
+
         <BottomSheetModal ref={sheetRef} index={1} snapPoints={snapPoint}>
           {renderAtToCartPage(selectedProduct)}
         </BottomSheetModal>
