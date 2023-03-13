@@ -9,7 +9,7 @@ import colors from "../constants/colors";
 
 const screen = Dimensions.get("window");
 
-export default ({ info }) => {
+export default ({ info, handleCancelPress}) => {
   const { imageSource, name, unit, quantity, price } = info;
   const [inputValue, setInputValue] = useState("1");
 
@@ -70,7 +70,7 @@ export default ({ info }) => {
         </View>
 
         <View style={styles.addCancelContainer}>
-          <TouchableOpacity style={styles.cancelButton}>
+          <TouchableOpacity style={styles.cancelButton} onPress={handleCancelPress}>
             <Text>Cancel</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.addButton}>

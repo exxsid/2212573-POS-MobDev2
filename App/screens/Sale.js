@@ -73,8 +73,12 @@ export default ({ navigation }) => {
     setSelectedProduct(item);
   };
 
+  const handleCancelPress = () =>{
+    sheetRef.current?.close();
+  }
+
   const renderAtToCartPage = (item) => {
-    return <AddToCart info={item} />;
+    return <AddToCart info={item} handleCancelPress={handleCancelPress}/>;
   };
   // const handleClosePress = useCallback(() => {
   //   sheetRef.current?.close();
