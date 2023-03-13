@@ -70,8 +70,11 @@ export default ({ info }) => {
         </View>
 
         <View style={styles.addCancelContainer}>
-          <TouchableOpacity>
-            <Text>Test</Text>
+          <TouchableOpacity style={styles.cancelButton}>
+            <Text>Cancel</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.addButton}>
+            <Text style={{color: colors.text}}>Add to cart</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -102,5 +105,19 @@ const styles = StyleSheet.create({
     borderColor: colors.backgroundSecondary,
     borderWidth: 1,
   },
-  addCancelContainer: { flexDirection: "row", alignItems: "left" },
+  addCancelContainer: { flex: 1, justifyContent:"flex-end", flexDirection: "row" , marginTop: 10},
+  cancelButton:{
+    padding: 10,
+    fontWeight:"bold",
+    borderColor: "red",
+    borderWidth: 1,
+    borderRadius: 10,
+    marginRight: 10
+  },
+  addButton:{
+    padding: 10,
+    fontWeight:"bold",
+    backgroundColor: colors.primary,
+    borderRadius: 10
+  }
 });

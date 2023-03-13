@@ -70,12 +70,10 @@ export default ({ navigation }) => {
   const handleSnapPress = (item) => {
     sheetRef.current?.present();
     // updateProdQuantity(inventory.at(index).quantity, index);
-    console.log(item);
     setSelectedProduct(item);
   };
 
   const renderAtToCartPage = (item) => {
-    console.log("tangina mo jopher");
     return <AddToCart info={item} />;
   };
   // const handleClosePress = useCallback(() => {
