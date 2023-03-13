@@ -62,6 +62,7 @@ export default ({ navigation }) => {
     setProduct(updatedProducts);
   };
 
+<<<<<<< HEAD
   const handleSnapPress = (item) => {
     console.log(item);
     navigation.push("AddToCart", { route: item });
@@ -70,9 +71,19 @@ export default ({ navigation }) => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle={"default"} />
+=======
+  const renderAtToCartPage = (item) => {
+    return <AddToCart info={item} />;
+  };
+
+  return (
+      <View style={styles.container}>
+        <StatusBar barStyle={"default"} />
+>>>>>>> c78095d18b1c2e104c8b60f9893c5e16835e5395
 
       <Searchbar />
 
+<<<<<<< HEAD
       <View style={styles.divider}>
         <Text style={styles.text}>All Products</Text>
         <TouchableOpacity style={styles.cartButton}>
@@ -102,5 +113,33 @@ export default ({ navigation }) => {
         {renderAtToCartPage(selectedProduct)}
       </BottomSheetModal>
     </View>
+=======
+        <View style={styles.divider}>
+          <Text style={styles.text}>All Products</Text>
+          <TouchableOpacity style={styles.cartButton}>
+            <Text
+              style={[styles.text, { fontSize: 15, paddingRight: 10 }]}
+              onPress={() => navigation.push("Cart")}
+            >
+              Cart
+            </Text>
+            <Ionicons name="cart" size={30} color={colors.text} />
+          </TouchableOpacity>
+        </View>
+
+        <FlatList
+          data={inventory}
+          renderItem={({ item }) => {
+            return (
+              <TouchableOpacity onPress={() => navigation.push("AddToCart", {route: item})}>
+                <ProductContainer info={item} />
+              </TouchableOpacity>
+            );
+          }}
+          keyExtractor={(product) => product.id}
+          showsVerticalScrollIndicator={false}
+        />
+      </View>
+>>>>>>> c78095d18b1c2e104c8b60f9893c5e16835e5395
   );
 };

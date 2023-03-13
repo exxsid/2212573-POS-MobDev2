@@ -50,7 +50,7 @@ export default ({ navigation, route }) => {
   return (
     <ScrollView>
       <View style={{ padding: 10 }}>
-        <CartProductCard info={info} />
+        <CartProductCard info={route.params} />
         <View style={{ flexDirection: "row" }}>
           <TextField
             placeholder={"Quantity"}
@@ -102,5 +102,5 @@ const styles = StyleSheet.create({
     borderColor: colors.backgroundSecondary,
     borderWidth: 1,
   },
-  addCancelContainer: { flexDirection: "row", alignItems: "left" },
+  addCancelContainer: { flexDirection: "row" },
 });

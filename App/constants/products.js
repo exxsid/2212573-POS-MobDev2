@@ -1,5 +1,6 @@
 export const inventory = [
   {
+    id: 1,
     imageSource: require("../assets/images/pepsi.png"),
     name: "Pepsi",
     unit: "1 liter",
@@ -7,6 +8,7 @@ export const inventory = [
     price: "50.00",
   },
   {
+    id: 2,
     imageSource: require("../assets/images/fishcake.webp"),
     name: "Fish Cake",
     unit: "25 grams",
@@ -14,6 +16,7 @@ export const inventory = [
     price: "2.00",
   },
   {
+    id: 3,
     imageSource: require("../assets/images/dragonsid.webp"),
     name: "Dragon Sid",
     unit: "10 grams",
