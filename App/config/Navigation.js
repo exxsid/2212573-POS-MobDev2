@@ -95,7 +95,7 @@ export const SaleStackScreen = () => {
         },
       }}
     >
-      <SaleStack.Screen name="Sale" component={SaleScreen} />
+      <SaleStack.Screen name="Sales" component={SaleScreen} />
       <SaleStack.Screen name="Cart" component={CartScreen} />
     </SaleStack.Navigator>
   );

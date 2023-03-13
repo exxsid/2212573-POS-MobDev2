@@ -73,12 +73,12 @@ export default ({ navigation }) => {
     setSelectedProduct(item);
   };
 
-  const handleCancelPress = () =>{
+  const handleCancelPress = () => {
     sheetRef.current?.close();
-  }
+  };
 
   const renderAtToCartPage = (item) => {
-    return <AddToCart info={item} handleCancelPress={handleCancelPress}/>;
+    return <AddToCart info={item} handleCancelPress={handleCancelPress} />;
   };
   // const handleClosePress = useCallback(() => {
   //   sheetRef.current?.close();
@@ -114,7 +114,7 @@ export default ({ navigation }) => {
               </TouchableOpacity>
             );
           }}
-          keyExtractor={(product) => product.name}
+          keyExtractor={(product) => product.id}
           showsVerticalScrollIndicator={false}
         />
         <BottomSheetModal ref={sheetRef} index={1} snapPoints={snapPoint}>
