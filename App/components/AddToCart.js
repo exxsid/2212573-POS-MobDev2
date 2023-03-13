@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, ScrollView, Text, Dimensions } from "react-native";
-import { TextField, Button, Colors } from "react-native-ui-lib";
+import { TextField } from "react-native-ui-lib";
 import { Entypo } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
@@ -9,8 +9,8 @@ import colors from "../constants/colors";
 
 const screen = Dimensions.get("window");
 
-export default ({ info }) => {
-  const { imageSource, name, unit, quantity, price } = info;
+export default ({ navigation, route }) => {
+  const { imageSource, name, unit, quantity, price } = route.params;
   const [inputValue, setInputValue] = useState("1");
 
   const handleInput = (text) => {

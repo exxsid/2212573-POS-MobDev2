@@ -85,18 +85,22 @@ export const TabNavigation = () => {
 
 export const SaleStackScreen = () => {
   return (
-    <SaleStack.Navigator
-      screenOptions={{
-        headerStyle: styles.headerStyle,
-        headerTintColor: colors.text,
-        headerTitleStyle: {
-          fontWeight: "bold",
-          fontSize: 30,
-        },
-      }}
-    >
-      <SaleStack.Screen name="Sale" component={SaleScreen} />
-      <SaleStack.Screen name="Cart" component={CartScreen} />
-    </SaleStack.Navigator>
+    <NavigationContainer>
+      <SaleStack.Navigator
+        screenOptions={{
+          headerStyle: styles.headerStyle,
+          headerTintColor: colors.text,
+          headerTitleStyle: {
+            fontWeight: "bold",
+            fontSize: 30,
+          },
+        }}
+        initialRouteName="Sale"
+      >
+        <SaleStack.Screen name="Sale" component={SaleScreen} />
+        <SaleStack.Screen name="Cart" component={CartScreen} />
+        <SaleSatack.Screen name="AddToCart" component={AddToCartScreen} />
+      </SaleStack.Navigator>
+    </NavigationContainer>
   );
 };

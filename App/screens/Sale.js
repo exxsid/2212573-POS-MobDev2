@@ -49,10 +49,7 @@ const styles = StyleSheet.create({
 });
 
 export default ({ navigation }) => {
-  const sheetRef = useRef(null);
-  const [isOpen, setIsOpen] = useState(false);
   const [products, setProduct] = useState(inventory);
-  const [selectedProduct, setSelectedProduct] = useState(products.at(0));
 
   const updateProdQuantity = (newQuantity, index) => {
     const updatedProducts = products.map((item, i) => {
@@ -65,60 +62,45 @@ export default ({ navigation }) => {
     setProduct(updatedProducts);
   };
 
-  const snapPoint = ["40%", "80%", "90%", "95%"];
-
   const handleSnapPress = (item) => {
-    sheetRef.current?.present();
-    // updateProdQuantity(inventory.at(index).quantity, index);
     console.log(item);
-    setSelectedProduct(item);
+    navigation.push("AddToCart", { route: item });
   };
-
-  const renderAtToCartPage = (item) => {
-    console.log("tangina mo jopher");
-    return <AddToCart info={item} />;
-  };
-  // const handleClosePress = useCallback(() => {
-  //   sheetRef.current?.close();
-  //   setIsOpen(false);
-  // }, []);
 
   return (
-    <BottomSheetModalProvider>
-      <View style={styles.container}>
-        <StatusBar barStyle={"default"} />
+    <View style={styles.container}>
+      <StatusBar barStyle={"default"} />
 
-        <Searchbar />
+      <Searchbar />
 
-        <View style={styles.divider}>
-          <Text style={styles.text}>All Products</Text>
-          <TouchableOpacity style={styles.cartButton}>
-            <Text
-              style={[styles.text, { fontSize: 15, paddingRight: 10 }]}
-              onPress={() => navigation.push("Cart")}
-            >
-              Cart
-            </Text>
-            <Ionicons name="cart" size={30} color={colors.text} />
-          </TouchableOpacity>
-        </View>
-
-        <FlatList
-          data={inventory}
-          renderItem={({ item }) => {
-            return (
-              <TouchableOpacity onPress={() => handleSnapPress(item)}>
-                <ProductContainer info={item} />
-              </TouchableOpacity>
-            );
-          }}
-          keyExtractor={(product) => product.name}
-          showsVerticalScrollIndicator={false}
-        />
-        <BottomSheetModal ref={sheetRef} index={1} snapPoints={snapPoint}>
-          {renderAtToCartPage(selectedProduct)}
-        </BottomSheetModal>
+      <View style={styles.divider}>
+        <Text style={styles.text}>All Products</Text>
+        <TouchableOpacity style={styles.cartButton}>
+          <Text
+            style={[styles.text, { fontSize: 15, paddingRight: 10 }]}
+            onPress={() => navigation.push("Cart")}
+          >
+            Cart
+          </Text>
+          <Ionicons name="cart" size={30} color={colors.text} />
+        </TouchableOpacity>
       </View>
-    </BottomSheetModalProvider>
+
+      <FlatList
+        data={inventory}
+        renderItem={({ item }) => {
+          return (
+            <TouchableOpacity onPress={() => handleSnapPress(item)}>
+              <ProductContainer info={item} />
+            </TouchableOpacity>
+          );
+        }}
+        keyExtractor={(product) => product.name}
+        showsVerticalScrollIndicator={false}
+      />
+      <BottomSheetModal ref={sheetRef} index={1} snapPoints={snapPoint}>
+        {renderAtToCartPage(selectedProduct)}
+      </BottomSheetModal>
+    </View>
   );
 };
