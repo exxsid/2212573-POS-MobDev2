@@ -15,6 +15,7 @@ export default ({
   handleSaveChangesPress,
   origPrice,
   origQuantity,
+  index,
 }) => {
   const { imageSource, name, unit, quantity, price } = info;
   const [inputValue, setInputValue] = useState(quantity.toString());

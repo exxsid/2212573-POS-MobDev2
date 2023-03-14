@@ -128,14 +128,16 @@ export default ({ navigation }) => {
           <TouchableOpacity style={styles.cartButton}>
             <Text
               style={[styles.text, { fontSize: 15, paddingRight: 10 }]}
-              onPress={() =>
-                navigation.push("Cart", {
-                  cartList: carts,
-                  saveChangesPress: handleAddToCartPress,
-                  prod: products,
-                  clearCartPress: handleClearCartPress,
-                })
-              }
+              onPress={() => {
+                carts.length === 0
+                  ? alert("Cart is empty")
+                  : navigation.push("Cart", {
+                      cartList: carts,
+                      saveChangesPress: handleAddToCartPress,
+                      prod: products,
+                      clearCartPress: handleClearCartPress,
+                    });
+              }}
             >
               Cart
             </Text>

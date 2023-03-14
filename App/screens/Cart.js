@@ -1,6 +1,13 @@
 import { Ionicons } from "@expo/vector-icons";
 import React, { useCallback, useRef, useMemo, useState } from "react";
-import { View, Text, StyleSheet, StatusBar, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  StatusBar,
+  FlatList,
+  Dimensions,
+} from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import {
   BottomSheetModalProvider,
@@ -12,16 +19,20 @@ import { Searchbar } from "../components/SearchBar";
 import colors from "../constants/colors";
 import EditCart from "../components/EditCart";
 
+const screen = Dimensions.get("window");
+
 export default ({ route, navigation }) => {
   const sheetRef = useRef(null);
   const { cartList, prod, saveChangesPress, clearCartPress } = route.params;
   const [selectedProduct, setSelectedProduct] = useState(cartList.at(0));
+  const [index, setIndex] = useState(0);
 
   const snapPoint = ["40%", "80%"];
 
-  const handleSnapPress = useCallback((item) => {
+  const handleSnapPress = useCallback((item, index) => {
     sheetRef.current?.present();
     setSelectedProduct(item);
+    setIndex(index);
   }, []);
 
   const handleCancelPress = () => {
@@ -44,7 +55,21 @@ export default ({ route, navigation }) => {
         handleSaveChangesPress={handleSaveChangesPress}
         origPrice={prod[item.id - 1].price}
         origQuantity={prod[item.id - 1].quantity}
+        index={index}
       />
+    );
+  };
+
+  const renderBottomComponent = () => {
+    return (
+      <View style={styles.bottomComponent}>
+        <View style={styles.total}>
+          <Text style={styles.totalText}>Total:</Text>
+          <Text style={styles.totalText}>
+            Php {cartList.reduce((acc, curr) => acc + curr.price, 0)}
+          </Text>
+        </View>
+      </View>
     );
   };
 
@@ -71,24 +96,28 @@ export default ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
 
-        <FlatList
-          data={cartList}
-          renderItem={({ item }) => {
-            return (
-              <TouchableOpacity onPress={() => handleSnapPress(item)}>
-                <ProductContainer info={item} />
-              </TouchableOpacity>
-            );
-          }}
-          keyExtractor={(product) => product.id}
-          showsVerticalScrollIndicator={false}
-        />
+        {cartList.length > 0 ? (
+          <FlatList
+            data={cartList}
+            renderItem={({ item, index }) => {
+              return (
+                <TouchableOpacity onPress={() => handleSnapPress(item, index)}>
+                  <ProductContainer info={item} />
+                </TouchableOpacity>
+              );
+            }}
+            keyExtractor={(product) => product.id}
+            showsVerticalScrollIndicator={false}
+          />
+        ) : (
+          <Text>Cart is empty</Text>
+        )}
 
         <BottomSheetModal ref={sheetRef} index={1} snapPoints={snapPoint}>
           {renderEditCartPage(selectedProduct)}
         </BottomSheetModal>
 
-        <View></View>
+        {renderBottomComponent()}
       </View>
     </BottomSheetModalProvider>
   );
@@ -119,5 +148,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderRadius: 2,
     justifyContent: "space-between",
+  },
+  bottomComponent: {
+    position: "absolute",
+    bottom: 0,
+    backgroundColor: colors.backgroundSecondary,
+    padding: 16,
+    width: screen.width,
+  },
+  total: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  totalText: {
+    color: colors.text,
+    fontWeight: "bold",
+    fontSize: 20,
   },
 });
