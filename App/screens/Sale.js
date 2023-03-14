@@ -111,7 +111,7 @@ export default ({ navigation }) => {
         updatedProducts[index].quantity += cartProd.quantity;
       }
     });
-    console.log(updatedProducts);
+
     setProduct(updatedProducts);
     setCarts([]);
   };
