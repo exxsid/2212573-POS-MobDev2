@@ -102,6 +102,17 @@ export default ({ navigation }) => {
   };
 
   const handleClearCartPress = () => {
+    const updatedProducts = [...products];
+    carts.forEach((cartProd) => {
+      const index = updatedProducts.findIndex(
+        (prod) => prod.id === cartProd.id
+      );
+      if (index !== -1) {
+        updatedProducts[index].quantity += cartProd.quantity;
+      }
+    });
+    console.log(updatedProducts);
+    setProduct(updatedProducts);
     setCarts([]);
   };
 
