@@ -7,6 +7,7 @@ import {
   StatusBar,
   FlatList,
   Dimensions,
+  Button,
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import {
@@ -69,6 +70,11 @@ export default ({ route, navigation }) => {
             Php {cartList.reduce((acc, curr) => acc + curr.price, 0)}
           </Text>
         </View>
+        <Button
+          title="Checkout"
+          color={colors.primary}
+          onPress={() => alert("Transaction is successfully saved.")}
+        />
       </View>
     );
   };
@@ -159,6 +165,7 @@ const styles = StyleSheet.create({
   total: {
     flexDirection: "row",
     justifyContent: "space-between",
+    marginBottom: 10,
   },
   totalText: {
     color: colors.text,
