@@ -57,18 +57,9 @@ const styles = StyleSheet.create({
 
 export default ({ navigation }) => {
   const sheetRef = useRef(null);
-  const [isOpen, setIsOpen] = useState(false);
   const [products, setProduct] = useState(inventory);
-  const [cart, setCart] = useState(cartList);
+  const [carts, setCarts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(products.at(0));
-
-  const handleAddToCartPress = (newQuantity, index) => {
-    const updatedProducts = [...products];
-    updatedProducts[index].quantity = newQuantity;
-
-    setProduct(updatedProducts);
-    handleCancelPress();
-  };
 
   const snapPoint = ["40%", "80%", "90%", "95%"];
 
@@ -77,11 +68,44 @@ export default ({ navigation }) => {
     setSelectedProduct(item);
   };
 
+  const handleAddToCartPress = (orderQuantity, index) => {
+    const updatedProducts = [...products];
+    const newQuantity = updatedProducts[index].quantity - orderQuantity;
+    updatedProducts[index].quantity = newQuantity;
+
+    setProduct(updatedProducts);
+    addProductToCart(products[index], orderQuantity);
+    handleCancelPress();
+  };
+
+  const addProductToCart = (newCartProduct, orderQuantity) => {
+    const index = carts.findIndex((item) => item.id === newCartProduct.id);
+    if (index === -1) {
+      carts.push({
+        id: newCartProduct.id,
+        imageSource: newCartProduct.imageSource,
+        name: newCartProduct.name,
+        unit: newCartProduct.unit,
+        quantity: orderQuantity,
+        price: orderQuantity * newCartProduct.price,
+      });
+    } else {
+      const updatedCart = [...carts];
+      updatedCart[index].quantity += orderQuantity;
+      updatedCart[index].price += orderQuantity * newCartProduct.price;
+      setCarts(updatedCart);
+    }
+  };
+
   const handleCancelPress = () => {
     sheetRef.current?.close();
   };
 
-  const renderAtToCartPage = (item) => {
+  const handleClearCartPress = () => {
+    setCarts([]);
+  };
+
+  const renderAddToCartPage = (item) => {
     return (
       <AddToCart
         info={item}
@@ -98,12 +122,20 @@ export default ({ navigation }) => {
 
         <Searchbar />
 
+        {/* Cart button */}
         <View style={styles.divider}>
           <Text style={styles.text}>All Products</Text>
           <TouchableOpacity style={styles.cartButton}>
             <Text
               style={[styles.text, { fontSize: 15, paddingRight: 10 }]}
-              onPress={() => navigation.push("Cart", { cart })}
+              onPress={() =>
+                navigation.push("Cart", {
+                  cartList: carts,
+                  saveChangesPress: handleAddToCartPress,
+                  prod: products,
+                  clearCartPress: handleClearCartPress,
+                })
+              }
             >
               Cart
             </Text>
@@ -125,7 +157,7 @@ export default ({ navigation }) => {
         />
 
         <BottomSheetModal ref={sheetRef} index={1} snapPoints={snapPoint}>
-          {renderAtToCartPage(selectedProduct)}
+          {renderAddToCartPage(selectedProduct)}
         </BottomSheetModal>
       </View>
     </BottomSheetModalProvider>

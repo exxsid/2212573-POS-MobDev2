@@ -9,25 +9,34 @@ import colors from "../constants/colors";
 
 const screen = Dimensions.get("window");
 
-export default ({ info, handleCancelPress, handleAddToCartPress }) => {
+export default ({
+  info,
+  handleCancelPress,
+  handleSaveChangesPress,
+  origPrice,
+  origQuantity,
+}) => {
   const { imageSource, name, unit, quantity, price } = info;
-  const [inputValue, setInputValue] = useState("1");
-  const [totalPrice, setTotalPrice] = useState(price);
+  const [inputValue, setInputValue] = useState(quantity.toString());
+  const [totalPrice, setTotalPrice] = useState(
+    parseInt(inputValue) * origPrice
+  );
 
   const handleInput = (text) => {
     setInputValue(text);
   };
 
   const handlePlusButton = () => {
-    const newQuantity = parseInt(inputValue) + 1;
-    const maxInputValue = quantity; // maximum input value
+    let newQuantity = parseInt(inputValue) + 1;
+    const maxInputValue = origQuantity; // maximum input value
     if (newQuantity > maxInputValue) {
-      setInputValue("1");
+      setInputValue(quantity.toString());
+      newQuantity = parseInt(inputValue);
       alert("Input must not be greater than the stock");
     } else {
       setInputValue(newQuantity.toString());
     }
-    setTotalPrice(newQuantity * price);
+    setTotalPrice(newQuantity * origPrice);
   };
 
   const handleMinusButton = () => {
@@ -38,11 +47,11 @@ export default ({ info, handleCancelPress, handleAddToCartPress }) => {
     } else {
       setInputValue(newQuantity.toString());
     }
-    setTotalPrice(newQuantity * price);
+    setTotalPrice(newQuantity * origPrice);
   };
 
   const validateInput = () => {
-    const maxInputValue = quantity; // maximum input value
+    const maxInputValue = origQuantity; // maximum input value
     const parsedValue = parseFloat(inputValue);
     if (parsedValue > maxInputValue) {
       setInputValue("");
@@ -86,11 +95,11 @@ export default ({ info, handleCancelPress, handleAddToCartPress }) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.addButton}
-            onPress={() =>
-              handleAddToCartPress(parseInt(inputValue), info.id - 1)
-            }
+            onPress={() => {
+              handleSaveChangesPress(parseInt(inputValue), info.id - 1);
+            }}
           >
-            <Text style={{ color: colors.text }}>Add to cart</Text>
+            <Text style={{ color: colors.text }}>Save changes</Text>
           </TouchableOpacity>
         </View>
       </View>
