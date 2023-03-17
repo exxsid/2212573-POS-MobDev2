@@ -147,6 +147,7 @@ export default ({ navigation }) => {
                       saveChangesPress: handleAddToCartPress,
                       prod: products,
                       clearCartPress: handleClearCartPress,
+                      checkoutCart: checkoutCart,
                     });
               }}
             >

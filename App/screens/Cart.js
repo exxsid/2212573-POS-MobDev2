@@ -24,7 +24,8 @@ const screen = Dimensions.get("window");
 
 export default ({ route, navigation }) => {
   const sheetRef = useRef(null);
-  const { cartList, prod, saveChangesPress, clearCartPress } = route.params;
+  const { cart, prod, saveChangesPress, clearCartPress } = route.params;
+  const [cartList, setCartList] = useState(cart);
   const [selectedProduct, setSelectedProduct] = useState(cartList.at(0));
   const [index, setIndex] = useState(0);
 
@@ -43,9 +44,21 @@ export default ({ route, navigation }) => {
   const handleSaveChangesPress = (quantity, index) => {
     if (quantity > cartList[index].quantity) {
       saveChangesPress(quantity - cartList[index].quantity, index);
+      setCartListOnChange(quantity, index);
+      handleCancelPress();
     } else if (quantity < cartList[index].quantity) {
       saveChangesPress(quantity - cartList[index].quantity, index);
+      setCartListOnChange(quantity, index);
+      handleCancelPress();
     }
+  };
+
+  const setCartListOnChange = (quantity, index) => {
+    const updatedCart = [...cartList];
+    updatedCart[index].quantity -= quantity;
+    updatedCart[index].price =
+      updatedCart[index].quantity * selectedProduct.price;
+    setCartList(updatedCart);
   };
 
   const renderEditCartPage = (item) => {
@@ -75,7 +88,7 @@ export default ({ route, navigation }) => {
           color={colors.primary}
           onPress={() => {
             alert("Transaction is successfully saved.");
-            cartList = [];
+            setCartList([]);
           }}
         />
       </View>
@@ -105,7 +118,7 @@ export default ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
 
-        {cartList.length > 0 ? (
+        {cartList.length < 0 ? (
           <FlatList
             data={cartList}
             renderItem={({ item, index }) => {
