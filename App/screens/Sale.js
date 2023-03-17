@@ -116,6 +116,10 @@ export default ({ navigation }) => {
     setCarts([]);
   };
 
+  const checkoutCart = () => {
+    setCarts([]);
+  };
+
   const renderAddToCartPage = (item) => {
     return (
       <AddToCart
@@ -147,6 +151,7 @@ export default ({ navigation }) => {
                       saveChangesPress: handleAddToCartPress,
                       prod: products,
                       clearCartPress: handleClearCartPress,
+                      checkoutCart: checkoutCart,
                     });
               }}
             >

@@ -73,7 +73,10 @@ export default ({ route, navigation }) => {
         <Button
           title="Checkout"
           color={colors.primary}
-          onPress={() => alert("Transaction is successfully saved.")}
+          onPress={() => {
+            alert("Transaction is successfully saved.");
+            route.params.checkoutCart();
+          }}
         />
       </View>
     );
