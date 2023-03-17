@@ -24,7 +24,8 @@ const screen = Dimensions.get("window");
 
 export default ({ route, navigation }) => {
   const sheetRef = useRef(null);
-  const { cartList, prod, saveChangesPress, clearCartPress } = route.params;
+  const { cart, prod, saveChangesPress, clearCartPress } = route.params;
+  const [cartList, setCartList] = useState(cart);
   const [selectedProduct, setSelectedProduct] = useState(cartList.at(0));
   const [index, setIndex] = useState(0);
 
@@ -40,12 +41,48 @@ export default ({ route, navigation }) => {
     sheetRef.current?.close();
   };
 
-  const handleSaveChangesPress = (quantity, index) => {
-    if (quantity > cartList[index].quantity) {
-      saveChangesPress(quantity - cartList[index].quantity, index);
-    } else if (quantity < cartList[index].quantity) {
-      saveChangesPress(quantity - cartList[index].quantity, index);
+  const handleSaveChangesPress = (newQuantity) => {
+    const inventoryIndex = prod.findIndex(
+      (item) => item.id === cartList[index].id
+    );
+    if (newQuantity > cartList[index].quantity) {
+      saveChangesPress(newQuantity - cartList[index].quantity, inventoryIndex);
+      setCartListOnSaveChange(newQuantity);
+      handleCancelPress();
+    } else if (newQuantity < cartList[index].quantity) {
+      saveChangesPress(newQuantity - cartList[index].quantity, inventoryIndex);
+      setCartListOnSaveChange(newQuantity);
+      handleCancelPress();
     }
+  };
+
+  const setCartListOnSaveChange = (newQuantity) => {
+    const updatedCart = [...cart];
+    updatedCart[index].quantity = newQuantity;
+    updatedCart[index].price = newQuantity * prod[selectedProduct.id - 1].price;
+    setCartList(updatedCart);
+  };
+
+  const handleClearCartPress = () => {
+    clearCartPress();
+    setCartList([]);
+  };
+
+  const handleCheckOutPress = () => {
+    route.params.checkoutCart();
+    setCartList([]);
+  };
+
+  const removeProduct = () => {
+    route.params.removeItemFromCart(
+      cartList[index].id,
+      cartList[index].quantity,
+      index
+    );
+    const updatedCart = [...cartList];
+    updatedCart.splice(index, 1);
+    setCartList(updatedCart);
+    sheetRef.current?.close();
   };
 
   const renderEditCartPage = (item) => {
@@ -56,7 +93,7 @@ export default ({ route, navigation }) => {
         handleSaveChangesPress={handleSaveChangesPress}
         origPrice={prod[item.id - 1].price}
         origQuantity={prod[item.id - 1].quantity}
-        index={index}
+        removeProduct={removeProduct}
       />
     );
   };
@@ -67,7 +104,7 @@ export default ({ route, navigation }) => {
         <View style={styles.total}>
           <Text style={styles.totalText}>Total:</Text>
           <Text style={styles.totalText}>
-            Php {cartList.reduce((acc, curr) => acc + curr.price, 0)}
+            Php {cartList.reduce((acc, curr) => acc + curr.price, 0)}.00
           </Text>
         </View>
         <Button
@@ -75,7 +112,7 @@ export default ({ route, navigation }) => {
           color={colors.primary}
           onPress={() => {
             alert("Transaction is successfully saved.");
-            route.params.checkoutCart();
+            handleCheckOutPress();
           }}
         />
       </View>
@@ -97,8 +134,8 @@ export default ({ route, navigation }) => {
               style={[
                 styles.text,
                 { fontSize: 15, paddingRight: 10, color: "red" },
-              ]} // TODO: clear cart list
-              onPress={() => clearCartPress()}
+              ]}
+              onPress={() => handleClearCartPress()}
             >
               Clear cart
             </Text>

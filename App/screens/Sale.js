@@ -97,6 +97,20 @@ export default ({ navigation }) => {
     }
   };
 
+  const removeItemFromCart = (cartItemId, quantity, cartIndex) => {
+    const inventoryIndex = products.findIndex(
+      (product) => product.id === cartItemId
+    );
+    const updatedProduct = [...products];
+    updatedProduct[inventoryIndex].quantity += quantity; // add the quantity of the removed item to the inventory
+    setProduct(updatedProduct);
+
+    // remove the item in carts
+    const updatedCart = [...carts];
+    updatedCart.splice(cartIndex, 1);
+    setCarts(updatedCart);
+  };
+
   const handleCancelPress = () => {
     sheetRef.current?.close();
   };
@@ -147,11 +161,12 @@ export default ({ navigation }) => {
                 carts.length === 0
                   ? alert("Cart is empty")
                   : navigation.push("Cart", {
-                      cartList: carts,
+                      cart: carts,
                       saveChangesPress: handleAddToCartPress,
                       prod: products,
                       clearCartPress: handleClearCartPress,
                       checkoutCart: checkoutCart,
+                      removeItemFromCart: removeItemFromCart,
                     });
               }}
             >

@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, ScrollView, Text, Dimensions } from "react-native";
-import { TextField, Button, Colors } from "react-native-ui-lib";
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  Text,
+  Dimensions,
+  Button,
+  Alert,
+} from "react-native";
+import { TextField, Colors } from "react-native-ui-lib";
 import { Entypo } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
@@ -15,7 +23,7 @@ export default ({
   handleSaveChangesPress,
   origPrice,
   origQuantity,
-  index,
+  removeProduct,
 }) => {
   const { imageSource, name, unit, quantity, price } = info;
   const [inputValue, setInputValue] = useState(quantity.toString());
@@ -44,12 +52,14 @@ export default ({
     const newQuantity = parseInt(inputValue) - 1;
     if (newQuantity <= 0) {
       alert("Quantity can never be zero or less");
-      setInputValue("1");
+      setInputValue(quantity.toString());
     } else {
       setInputValue(newQuantity.toString());
     }
     setTotalPrice(newQuantity * origPrice);
   };
+
+  const handleRemovePress = () => {};
 
   const validateInput = () => {
     const maxInputValue = origQuantity; // maximum input value
@@ -88,20 +98,48 @@ export default ({
         </View>
         {/* buttons */}
         <View style={styles.addCancelContainer}>
-          <TouchableOpacity
-            style={styles.cancelButton}
-            onPress={handleCancelPress}
-          >
-            <Text>Cancel</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.addButton}
+          {/* Delete button */}
+          <Button
+            title="Remove"
+            color="red"
             onPress={() => {
-              handleSaveChangesPress(parseInt(inputValue), info.id - 1);
+              Alert.alert(
+                "Remove",
+                "Are you sure to remove this product?",
+                [
+                  {
+                    text: "Cancel",
+                    onPress: () => {},
+                    style: "cancel",
+                  },
+                  {
+                    text: "OK",
+                    onPress: () => removeProduct(),
+                    style: "destructive",
+                  },
+                ],
+                {
+                  cancelable: false,
+                }
+              );
             }}
-          >
-            <Text style={{ color: colors.text }}>Save changes</Text>
-          </TouchableOpacity>
+          />
+          <View style={{ flexDirection: "row" }}>
+            <TouchableOpacity
+              style={styles.cancelButton}
+              onPress={handleCancelPress}
+            >
+              <Text>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.addButton}
+              onPress={() => {
+                handleSaveChangesPress(parseInt(inputValue));
+              }}
+            >
+              <Text style={{ color: colors.text }}>Save changes</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </ScrollView>
@@ -133,7 +171,7 @@ const styles = StyleSheet.create({
   },
   addCancelContainer: {
     flex: 1,
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
     flexDirection: "row",
     marginTop: 10,
   },
